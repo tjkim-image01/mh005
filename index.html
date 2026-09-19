@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>점창여제 — 작품관</title>
+<meta name="description" content="검이 대답하지 않았다. 그래서, 창을 들었다. — 정통 무협 성장 액션 『점창여제』 1부 『창월무후』"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/app.css"/>
+<style>
+  header.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(10,12,15,.82); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line-soft); }
+  .nav-in { max-width:1120px; margin:0 auto; padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; }
+  .brand { display:flex; align-items:baseline; gap:9px; }
+  .brand b { font-family:var(--serif); font-size:19px; color:var(--white); }
+  .brand span { font-size:11px; color:var(--dim); }
+  .nav-links { display:flex; gap:26px; font-size:13px; color:var(--dim); }
+  .nav-links a:hover { color:var(--coral); }
+
+  /* 히어로 */
+  .hero { padding:132px 0 64px; }
+  .hero-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center; }
+  .kicker { font-size:12px; letter-spacing:.14em; color:var(--coral); font-weight:700; margin-bottom:18px; }
+  .hero h1 { font-size:clamp(30px,4.6vw,50px); line-height:1.32; color:var(--white); margin-bottom:22px; }
+  .hero h1 em { font-style:normal; color:var(--coral); }
+  .logline { font-size:15px; line-height:1.95; color:var(--mist); max-width:34em; margin-bottom:26px; }
+  .quote { font-family:var(--serif); font-size:15px; color:var(--amber); border-left:2px solid var(--amber);
+    padding-left:15px; margin:0 0 30px; line-height:1.8; }
+  .cta { display:flex; gap:11px; flex-wrap:wrap; }
+  /* 캐릭터 시트는 흰 배경 16:9 모델시트다. 잘라내지 않고 판에 얹어 보여준다. */
+  .sheet-plate { border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--panel); }
+  .sheet-plate .img { background:#f6f3ee; aspect-ratio:16/9; display:flex; }
+  .sheet-plate .img img { width:100%; height:100%; object-fit:contain; }
+  .sheet-plate figcaption { padding:15px 18px 17px; font-size:12px; color:var(--dim);
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .sheet-plate figcaption b { font-family:var(--serif); font-size:17px; color:var(--white); }
+
+  /* 상태 배너 */
+  .status { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line-soft);
+    border:1px solid var(--line-soft); border-radius:var(--r); overflow:hidden; margin-bottom:8px; }
+  .status div { background:var(--panel); padding:16px 20px; }
+  .status .k { font-size:11px; font-weight:700; letter-spacing:.08em; color:var(--amber); margin-bottom:5px; }
+  .status .v { font-size:13px; color:var(--mist); }
+
+  section.block { padding:70px 0; }
+  .head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:30px; }
+  .head h2 { font-size:25px; color:var(--white); }
+  .head p { margin:6px 0 0; font-size:13px; color:var(--dim); }
+
+  /* 회차 */
+  .eps { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .act-head { display:flex; align-items:baseline; gap:12px; margin:34px 0 14px; }
+  .act-head:first-child { margin-top:0; }
+  .act-n { font-family:var(--serif); font-size:16px; color:var(--amber); }
+  .act-r { font-size:11.5px; color:var(--dim); }
+  .act-head::after { content:""; flex:1; height:1px; background:var(--line-soft); }
+  .ep { position:relative; padding:20px 22px; overflow:hidden; }
+  .ep .num { position:absolute; right:14px; top:2px; font-family:var(--serif); font-size:58px;
+    font-weight:800; color:rgba(255,255,255,.045); line-height:1; pointer-events:none; }
+  .ep .meta { display:flex; align-items:center; gap:7px; margin-bottom:10px; flex-wrap:wrap; }
+  .ep h3 { font-size:18px; color:var(--white); margin-bottom:9px; }
+  .ep .hook { font-size:13px; color:var(--mist); line-height:1.7; min-height:2.4em; margin-bottom:14px;
+    font-family:var(--serif); }
+  .ep .foot { display:flex; align-items:center; gap:8px; }
+  .mini { font-size:12px; font-weight:700; padding:7px 13px; border-radius:8px;
+    border:1px solid var(--line-soft); color:var(--mist); transition:all .15s var(--ease); }
+  .mini:hover { border-color:var(--coral); color:var(--coral); }
+  .mini.on { background:var(--coral); border-color:var(--coral); color:#1a0806; }
+  .mini.off { opacity:.42; pointer-events:none; }
+  .ep .len { margin-left:auto; font-size:11px; color:var(--dim); }
+
+  /* 인물 */
+  .chars { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .ch { overflow:hidden; }
+  .ch .ph { aspect-ratio:16/9; background:#f6f3ee; overflow:hidden; }
+  .ch .ph img { width:100%; height:100%; object-fit:contain; transition:transform .4s var(--ease); }
+  .ch:hover .ph img { transform:scale(1.03); }
+  .ch .body { padding:15px 18px 18px; }
+  .ch .nm { font-family:var(--serif); font-size:17px; color:var(--white); }
+  .ch .nm small { font-size:11px; color:var(--dim); margin-left:5px; font-family:var(--sans); }
+  .ch .role { font-size:11px; color:var(--coral); margin:5px 0 3px; }
+  .ch .tag { font-size:11px; color:var(--dim); }
+  .ch .q { font-family:var(--serif); font-size:12px; color:var(--mist); margin-top:11px;
+    padding-top:11px; border-top:1px solid var(--line-soft); line-height:1.7; }
+
+  /* 세계관 */
+  .world { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .world div { padding:24px; }
+  .world h3 { font-size:18px; color:var(--amber); margin-bottom:11px; }
+  .world p { margin:0; font-size:13.5px; line-height:1.9; color:var(--mist); }
+
+  footer { border-top:1px solid var(--line-soft); padding:40px 0 60px; font-size:12px; color:var(--dim); }
+  footer .fl { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+
+  @media (max-width:900px) {
+    .hero-grid { grid-template-columns:1fr; gap:34px; }
+    .chars { grid-template-columns:1fr; }
+    .world { grid-template-columns:1fr; }
+  }
+  @media (max-width:640px) {
+    .wrap { padding:0 18px; }
+    .nav-in { padding:0 18px; }
+    .nav-links { display:none; }
+    .hero { padding:104px 0 48px; }
+    .eps { grid-template-columns:1fr; }
+    .status { grid-template-columns:1fr; }
+    section.block { padding:52px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="index.html"><b>점창여제</b><span id="brand-sub"></span></a>
+    <nav class="nav-links">
+      <a href="#episodes">회차</a><a href="#characters">등장인물</a><a href="#world">세계관</a>
+    </nav>
+    <a class="btn btn-fill" style="padding:9px 17px;font-size:13px" id="cta-nav" href="#episodes">1화 읽기</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker" id="kicker"></p>
+        <h1>검이 대답하지 않았다.<br/>그래서, <em>창을 들었다.</em></h1>
+        <p class="logline" id="logline"></p>
+        <p class="quote" id="quote"></p>
+        <div class="cta">
+          <a class="btn btn-fill" id="cta-novel" href="#">소설 1화 읽기</a>
+          <a class="btn btn-ghost" id="cta-webtoon" href="#">웹툰 보기</a>
+        </div>
+      </div>
+      <figure class="sheet-plate" style="margin:0">
+        <div class="img"><img src="assets/characters/CHAR-SEOHA.jpg" alt="한서하 캐릭터 시트"/></div>
+        <figcaption><b>한서하 <span style="font-size:12px;color:var(--dim)">韓瑞霞</span></b>
+          <span>점창의 절맥녀 · 훗날의 창월무후</span>
+          <span class="badge mute" style="margin-left:auto">캐릭터 시트</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="status">
+      <div><div class="k">소설</div><div class="v" id="st-novel"></div></div>
+      <div><div class="k">웹툰</div><div class="v" id="st-webtoon"></div></div>
+    </div>
+  </div>
+
+  <section class="block" id="episodes">
+    <div class="wrap">
+      <div class="head">
+        <div><h2 id="ep-title"></h2><p id="ep-sub"></p></div>
+        <span class="badge mute">C4 = 반전 절단 · C3 = 전환 절단</span>
+      </div>
+      <div id="ep-list"></div>
+    </div>
+  </section>
+
+  <section class="block" id="characters" style="background:var(--ink-2);border-block:1px solid var(--line-soft)">
+    <div class="wrap">
+      <div class="head"><div><h2>등장인물</h2><p>캐릭터 시트는 03.make 에서 생성된 원본이다.</p></div></div>
+      <div class="chars" id="char-list"></div>
+    </div>
+  </section>
+
+  <section class="block" id="world">
+    <div class="wrap">
+      <div class="head"><div><h2>세계관</h2><p>운해 위의 검문, 지워진 창, 그리고 혈월.</p></div></div>
+      <div class="world" id="world-list"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap fl">
+    <div id="foot-left"></div>
+    <div>소설 원고 · 01.story/1차교정 &nbsp;·&nbsp; 웹툰 대본 · 01.story/대본</div>
+  </div>
+</footer>
+
+<script src="assets/js/series_data.js"></script>
+<script>
+(() => {
+  const W = Series.work;
+  const el = (id) => document.getElementById(id);
+
+  el("brand-sub").textContent = W.hanja;
+  el("kicker").textContent = `${W.part} · ${W.genre}`;
+  el("logline").textContent = W.logline;
+  el("quote").textContent = `“${W.quote}”`;
+
+  el("foot-left").textContent = `${W.title}(${W.hanja}) · ${W.english} · ${W.author} · ${W.rating}`;
+
+  const eps = Series.episodes;
+  const totalChars = eps.reduce((s, e) => s + e.chars, 0);
+  const totalCuts = eps.reduce((s, e) => s + e.scriptCuts, 0);
+  const readyCuts = eps.filter((e) => e.webtoonReady).length;
+  el("st-novel").textContent = W.status.novel(eps.length);
+  el("st-webtoon").textContent = readyCuts
+    ? `${readyCuts}화 공개 중 · 대본 ${eps.length}화 ${totalCuts}컷`
+    : W.status.webtoon(eps.length, totalCuts);
+  el("ep-title").textContent = `전체 ${eps.length}화`;
+  el("ep-sub").textContent =
+    `소설 약 ${totalChars.toLocaleString()}자 · 웹툰 대본 ${totalCuts}컷`;
+
+  el("cta-novel").href = Series.link("novel", 1);
+  el("cta-nav").href = Series.link("novel", 1);
+  el("cta-webtoon").href = Series.link("webtoon", 1);
+
+  // 회차 카드 — 막 단위로 묶는다. 원고가 늘어 2막이 생기면 여기도 저절로 생긴다.
+  const card = (e) => {
+    const title = e.title.replace(/^\d+화\s*—\s*/, "");
+    const grade = e.cutGrade
+      ? `<span class="badge${e.cutGrade === "C4" ? "" : " mute"}">${e.cutGrade}${e.cutGradeLabel ? " " + e.cutGradeLabel : ""}</span>`
+      : "";
+    return `
+    <article class="card ep">
+      <div class="num">${String(e.ep).padStart(2, "0")}</div>
+      <div class="meta"><span class="badge amber">${e.ep}화</span>${grade}</div>
+      <h3>${title}</h3>
+      <p class="hook">${e.hook}</p>
+      <div class="foot">
+        <a class="mini on" href="${Series.link("novel", e.ep)}">소설</a>
+        <a class="mini ${e.webtoonReady ? "" : "off"}" href="${e.webtoonReady ? Series.link("webtoon", e.ep) : "#"}"
+           ${e.webtoonReady ? "" : 'aria-disabled="true" title="작화 준비 중"'}>웹툰${e.webtoonReady ? "" : " 준비 중"}</a>
+        <span class="len">${e.minutes}분 · ${e.scriptCuts}컷</span>
+      </div>
+    </article>`;
+  };
+
+  el("ep-list").innerHTML = Series.byAct().map((g) => `
+    <div class="act-head">
+      <span class="act-n">${g.name}</span>
+      <span class="act-r">${g.eps[0].ep}–${g.eps[g.eps.length - 1].ep}화</span>
+    </div>
+    <div class="eps">${g.eps.map(card).join("")}</div>`).join("");
+
+  // 인물
+  el("char-list").innerHTML = Series.characters.map((c) => `
+    <article class="card ch">
+      <div class="ph"><img src="${c.image}" alt="${c.name} 캐릭터 시트" loading="lazy"/></div>
+      <div class="body">
+        <div class="nm">${c.name}<small>${c.hanja}</small></div>
+        <div class="role">${c.role}</div>
+        <div class="tag">${c.epithet} · ${c.tag}</div>
+        <div class="q">“${c.quote}”</div>
+      </div>
+    </article>`).join("");
+
+  // 세계관
+  el("world-list").innerHTML = Series.world.map((w) =>
+    `<div class="card"><h3>${w.title}</h3><p>${w.body}</p></div>`).join("");
+})();
+</script>
+</body>
+</html>

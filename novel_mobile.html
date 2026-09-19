@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="ink" data-size="2" data-lead="1" data-font="serif">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>점창여제 — 소설</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/app.css"/>
+<link rel="stylesheet" href="assets/css/novel.css"/>
+<style>.bar .icon-btn { color: var(--text); }</style>
+<style>
+  .bar-inner { max-width: 640px; }
+  .ttl { flex:1; text-align:center; min-width:0; }
+  .ttl b { display:block; font-size:13.5px; font-weight:700; color:var(--text);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ttl span { font-size:10.5px; color:var(--accent); }
+  main { max-width:640px; margin:0 auto; padding:calc(var(--bar) + 30px) 20px 40px; }
+  .pct { position:fixed; right:12px; bottom:calc(14px + env(safe-area-inset-bottom));
+    z-index:45; font-size:11px; color:var(--text-dim); font-family:var(--sans);
+    background:var(--paper); padding:5px 10px; border-radius:999px; border:1px solid var(--edge);
+    transition:opacity .25s var(--ease); }
+  .pct.hidden { opacity:0; }
+  .resume { position:fixed; left:50%; transform:translateX(-50%); bottom:74px; z-index:46;
+    display:none; align-items:center; gap:12px; padding:11px 15px; border-radius:999px;
+    background:var(--panel); border:1px solid var(--line); font-size:13px; color:var(--white);
+    box-shadow:0 8px 28px rgba(0,0,0,.45); font-family:var(--sans); }
+  .resume.show { display:flex; }
+  .resume b { color:var(--coral); }
+  .sheet .tabs { display:flex; gap:6px; padding:0 12px 12px; }
+  .sheet .tabs button { flex:1; padding:9px; border-radius:9px; border:1px solid var(--edge);
+    font-size:12.5px; font-family:var(--sans); color:var(--text-dim); }
+  .sheet .tabs button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent);
+    color:var(--paper); font-weight:700; }
+  #settings-body { padding:4px 18px 26px; display:none; }
+  #settings-body.show { display:block; }
+  #list-body.hide { display:none; }
+</style>
+</head>
+<body class="reader">
+
+<div class="progress"><i id="pg"></i></div>
+
+<header class="bar top" id="topbar">
+  <div class="bar-inner">
+    <a class="icon-btn" href="index.html" aria-label="작품관으로">←</a>
+    <button class="ttl" id="btn-title" aria-label="회차 목록 열기">
+      <b id="t-title">불러오는 중…</b><span id="t-sub">점창여제</span>
+    </button>
+    <button class="icon-btn" id="btn-settings" aria-label="읽기 설정" style="font-family:var(--serif);font-weight:700">Aa</button>
+  </div>
+</header>
+
+<main>
+  <div class="opener">
+    <div class="n" id="o-n"></div>
+    <h1 id="o-title"></h1>
+    <p class="hook" id="o-hook"></p>
+    <div class="info" id="o-info"></div>
+  </div>
+  <article class="prose" id="prose"></article>
+  <div class="ending" id="ending" hidden>
+    <div class="done" id="e-done"></div>
+    <div class="cut" id="e-cut"></div>
+    <div class="acts">
+      <a class="go" id="e-next">다음 화</a>
+      <a class="go alt" id="e-webtoon">웹툰으로 보기</a>
+      <a class="go alt" href="index.html">작품관</a>
+    </div>
+  </div>
+</main>
+
+<div class="pct" id="pct">0%</div>
+<button class="resume" id="resume"><span>읽던 곳 <b id="resume-pct"></b></span><span style="color:var(--dim)">이어서 →</span></button>
+
+<div class="sheet-back" id="back"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-head"><span id="sheet-title">회차 목록</span><button class="icon-btn" id="btn-close" aria-label="닫기">✕</button></div>
+  <div class="tabs">
+    <button id="tab-list" aria-pressed="true">회차</button>
+    <button id="tab-set" aria-pressed="false">읽기 설정</button>
+  </div>
+  <div class="sheet-list" id="list-body"></div>
+  <div id="settings-body"></div>
+</div>
+
+<script src="assets/js/series_data.js"></script>
+<script src="assets/js/novel.js"></script>
+<script src="assets/js/reader_ui.js"></script>
+<script>
+(() => {
+  const ep = Series.epFromQuery();
+  const meta = Series.get(ep);
+  const $ = (id) => document.getElementById(id);
+
+  Novel.apply(Novel.prefs());
+  ReaderUI.settingsPanel($("settings-body"));
+
+  document.title = `${meta.title} — 점창여제`;
+  $("t-title").textContent = meta.title;
+  $("o-n").textContent = `${Series.work.part} · ${Series.actLabel(ep)} · 제${ep}화`;
+  $("o-title").textContent = meta.title.replace(/^\d+화\s*—\s*/, "");
+  if (meta.hook) $("o-hook").textContent = meta.hook; else $("o-hook").hidden = true;
+  $("o-info").textContent = `${meta.chars.toLocaleString()}자 · 읽는 데 약 ${meta.minutes}분 · 씬 ${meta.scenes}`;
+
+  // 회차 목록 + 읽기 설정을 같은 바텀시트의 두 탭으로 둔다
+  ReaderUI.episodeList($("list-body"), ep, (n) => `novel_mobile.html?ep=${n}`);
+  const sheet = ReaderUI.sheet($("sheet"), $("back"), [$("btn-title"), $("btn-close")]);
+  $("tab-list").onclick = () => swap(true);
+  $("tab-set").onclick = () => swap(false);
+  $("btn-settings").onclick = () => { swap(false); sheet.open(); };
+  function swap(list) {
+    $("tab-list").setAttribute("aria-pressed", list);
+    $("tab-set").setAttribute("aria-pressed", !list);
+    $("list-body").classList.toggle("hide", !list);
+    $("settings-body").classList.toggle("show", !list);
+    $("sheet-title").textContent = list ? "회차 목록" : "읽기 설정";
+  }
+
+  // 본문
+  Novel.load(ep, (data) => {
+    $("prose").innerHTML = Novel.render(data);
+    $("ending").hidden = false;
+    $("e-done").textContent = `${meta.title} 끝`;
+    $("e-cut").textContent = meta.cutGrade
+      ? `절단 ${meta.cutGrade}${meta.cutGradeLabel ? " · " + meta.cutGradeLabel : ""}`
+      : "";
+    ReaderUI.endLinks(meta, ep, (n) => `novel_mobile.html?ep=${n}`, "webtoon_mobile.html", $("e-next"), $("e-webtoon"));
+    start();
+  }, () => {
+    $("prose").innerHTML = '<p style="color:var(--text-dim)">본문을 불러오지 못했습니다. <code>tools/build_web.py</code> 를 실행했는지 확인하세요.</p>';
+  });
+
+  function start() {
+    Novel.track(window, ep, (r) => {
+      $("pg").style.width = (r * 100).toFixed(1) + "%";
+      const left = Math.max(0, Math.round(meta.minutes * (1 - r)));
+      $("pct").textContent = `${Math.round(r * 100)}%` + (left ? ` · ${left}분 남음` : " · 끝");
+    });
+
+    // 읽던 곳 복원은 강요하지 않는다. 물어보고, 8초 뒤 사라진다.
+    const saved = Novel.getPos(ep);
+    if (saved > 0.04 && saved < 0.97) {
+      $("resume-pct").textContent = Math.round(saved * 100) + "%";
+      $("resume").classList.add("show");
+      $("resume").onclick = () => { Novel.scrollTo(window, saved); $("resume").classList.remove("show"); };
+      setTimeout(() => $("resume").classList.remove("show"), 8000);
+    }
+
+    // 읽는 중에는 UI 를 치운다 — 내려가면 숨기고, 올리거나 탭하면 보인다
+    ReaderUI.autoHide([$("topbar")], $("pct"), document.querySelector("main"));
+  }
+
+  ReaderUI.keys({
+    prev: () => ep > 1 && (location.href = `novel_mobile.html?ep=${ep - 1}`),
+    next: () => ep < Series.count() && (location.href = `novel_mobile.html?ep=${ep + 1}`),
+  });
+})();
+</script>
+</body>
+</html>

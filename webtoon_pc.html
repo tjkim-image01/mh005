@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>점창여제 — 웹툰 (PC)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/app.css"/>
+<style>
+  body { display:flex; height:100vh; overflow:hidden; background:#07080a; }
+
+  aside { width:288px; flex:none; height:100vh; display:flex; flex-direction:column;
+    background:var(--panel); border-right:1px solid var(--line); transition:margin-left .25s var(--ease); }
+  body.zen aside { margin-left:-288px; }
+
+  .side-head { padding:18px; border-bottom:1px solid var(--line-soft); }
+  .side-head a { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--dim); }
+  .side-head a:hover { color:var(--coral); }
+  .side-head h1 { font-family:var(--serif); font-size:19px; color:var(--white); margin-top:10px; }
+  .side-head p { margin:4px 0 0; font-size:11px; color:var(--dim); }
+  .side-list { flex:1; overflow-y:auto; padding:10px; }
+  .side-foot { padding:14px 16px; border-top:1px solid var(--line-soft); }
+  .side-foot .row { display:flex; justify-content:space-between; font-size:11.5px; color:var(--dim); padding:4px 0; }
+  .side-foot .row b { color:var(--mist); font-weight:600; }
+  .side-foot a { display:block; margin-top:12px; text-align:center; padding:10px; border-radius:9px;
+    border:1px solid var(--line); font-size:12.5px; color:var(--coral); }
+  .side-foot a:hover { background:var(--coral-dim); }
+
+  .stage { flex:1; height:100vh; overflow-y:auto; position:relative; }
+  #cuts { width:var(--col); max-width:100%; margin:0 auto; background:#000; font-size:0; }
+  #cuts img { width:100%; height:auto; display:block; }
+
+  .topright { position:fixed; top:14px; right:22px; z-index:40; display:flex; gap:8px; }
+  .chip { font-size:12px; color:var(--mist); background:rgba(14,18,23,.92);
+    border:1px solid var(--line-soft); padding:8px 14px; border-radius:999px; }
+  .chip:hover { border-color:var(--coral); color:var(--coral); }
+
+  /* 우측 컷 인덱스 레일 */
+  .rail { position:fixed; right:14px; top:50%; transform:translateY(-50%); z-index:35;
+    display:flex; flex-direction:column; align-items:center; gap:7px; }
+  .rail .bar-track { width:3px; height:180px; background:rgba(255,255,255,.08); border-radius:2px; position:relative; }
+  .rail .bar-track i { position:absolute; left:0; width:3px; background:var(--coral); border-radius:2px; top:0; height:0; }
+  .rail .n { font-size:11px; color:var(--dim); writing-mode:vertical-rl; letter-spacing:.1em; }
+
+  .pending { width:var(--col); max-width:100%; margin:0 auto; padding:88px 40px 60px; text-align:center; }
+  .pending .seal { font-family:var(--serif); font-size:72px; color:rgba(226,104,95,.2); line-height:1; margin-bottom:26px; }
+  .pending h2 { font-size:27px; color:var(--white); margin-bottom:12px; }
+  .pending .hook { font-family:var(--serif); font-size:16px; color:var(--amber); line-height:1.9;
+    margin:0 auto 32px; max-width:26em; }
+  .stat { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line-soft);
+    border:1px solid var(--line-soft); border-radius:var(--r); overflow:hidden; margin-bottom:30px; }
+  .stat div { background:var(--panel); padding:20px 10px; }
+  .stat .v { font-family:var(--serif); font-size:26px; color:var(--white); }
+  .stat .k { font-size:11px; color:var(--dim); margin-top:4px; }
+  .pending .note { font-size:13.5px; color:var(--dim); line-height:2; margin-bottom:30px; }
+  .pending .acts { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+  .end { width:var(--col); max-width:100%; margin:0 auto; padding:56px 40px 80px; text-align:center;
+    border-top:1px solid var(--line-soft); }
+  .end .done { font-family:var(--serif); font-size:20px; color:var(--white); margin-bottom:6px; }
+  .end .sub { font-size:12.5px; color:var(--dim); margin-bottom:26px; }
+  .end .acts { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+  .hint { position:fixed; left:50%; transform:translateX(-50%); bottom:20px; z-index:40;
+    font-size:11.5px; color:var(--dim); background:rgba(14,18,23,.92);
+    border:1px solid var(--line-soft); padding:7px 15px; border-radius:999px;
+    transition:opacity .3s var(--ease); }
+  .hint.gone { opacity:0; pointer-events:none; }
+
+  @media (max-width:1120px) { aside { width:240px; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><i id="pg"></i></div>
+
+<aside>
+  <div class="side-head">
+    <a href="index.html">← 점창여제 작품관</a>
+    <h1 id="s-title"></h1>
+    <p id="s-info"></p>
+  </div>
+  <div class="side-list scroll" id="list-body"></div>
+  <div class="side-foot">
+    <div class="row"><span>컷 대본</span><b id="f-cuts"></b></div>
+    <div class="row"><span>말풍선</span><b id="f-bub"></b></div>
+    <div class="row"><span>절단 강도</span><b id="f-grade"></b></div>
+    <a id="f-novel">이 회차 소설로 읽기</a>
+  </div>
+</aside>
+
+<div class="stage scroll" id="stage">
+  <div id="cuts"></div>
+  <div id="pending"></div>
+  <div class="end" id="end" hidden>
+    <div class="done" id="e-done"></div>
+    <div class="sub" id="e-sub"></div>
+    <div class="acts">
+      <a class="btn btn-fill" id="e-next">다음 화</a>
+      <a class="btn btn-ghost" id="e-novel">소설로 읽기</a>
+      <a class="btn btn-ghost" href="index.html">작품관</a>
+    </div>
+  </div>
+</div>
+
+<div class="topright">
+  <button class="chip" id="zen">몰입 모드</button>
+  <a class="chip" id="to-novel">소설로 보기</a>
+</div>
+
+<div class="rail" id="rail" hidden>
+  <span class="n" id="rail-n">1 / 1</span>
+  <div class="bar-track"><i id="rail-fill"></i></div>
+</div>
+
+<div class="hint" id="hint">← → 회차 &nbsp;·&nbsp; Space 스크롤 &nbsp;·&nbsp; F 몰입 모드</div>
+
+<script src="assets/js/series_data.js"></script>
+<script src="assets/js/novel.js"></script>
+<script src="assets/js/reader_ui.js"></script>
+<script>
+(() => {
+  const ep = Series.epFromQuery();
+  const meta = Series.get(ep);
+  const $ = (id) => document.getElementById(id);
+  const stage = $("stage");
+  const href = (n) => `webtoon_pc.html?ep=${n}`;
+
+  document.title = `${meta.title} — 점창여제`;
+  $("s-title").textContent = meta.title;
+  $("s-info").textContent = `${Series.actLabel(ep)} · ${ep} / ${Series.count()}화`;
+  $("f-cuts").textContent = `${meta.scriptCuts}컷`;
+  $("f-bub").textContent = `${meta.bubbles}개`;
+  $("f-grade").textContent = meta.cutGrade
+    ? `${meta.cutGrade}${meta.cutGradeLabel ? " " + meta.cutGradeLabel : ""}` : "—";
+  $("f-novel").href = $("to-novel").href = $("e-novel").href = `novel_pc.html?ep=${ep}`;
+
+  ReaderUI.episodeList($("list-body"), ep, href, { requireCuts: true });
+
+  if (meta.webtoonReady) {
+    $("cuts").innerHTML = meta.cuts.map((src, i) =>
+      `<img src="${src}" alt="${ep}화 ${i + 1}컷" loading="${i < 3 ? "eager" : "lazy"}" decoding="async"/>`).join("");
+    $("rail").hidden = false;
+    $("end").hidden = false;
+    $("e-done").textContent = `${meta.title} 끝`;
+    $("e-sub").textContent = `${meta.cuts.length}컷` +
+      (meta.cutGrade ? ` · 절단 ${meta.cutGrade}` : "");
+    trackCuts();
+  } else {
+    $("pending").innerHTML = `
+      <div class="pending">
+        <div class="seal">槍</div>
+        <h2>${meta.title.replace(/^\d+화\s*—\s*/, "")}</h2>
+        <p class="hook">${meta.hook}</p>
+        <div class="stat">
+          <div><div class="v">${meta.scriptCuts}</div><div class="k">컷 대본</div></div>
+          <div><div class="v">${meta.bubbles}</div><div class="k">말풍선</div></div>
+          <div><div class="v">${meta.cutGrade || "—"}</div><div class="k">절단 강도</div></div>
+        </div>
+        <p class="note">이 회차는 <b style="color:var(--mist)">컷 대본까지 완료</b>되었습니다.
+          작화(<code>03.make</code>)가 끝나면 이 자리에 컷이 채워집니다.<br/>
+          지금은 같은 이야기를 소설로 먼저 읽을 수 있습니다.</p>
+        <div class="acts">
+          <a class="btn btn-fill" href="novel_pc.html?ep=${ep}">소설로 읽기 · ${meta.minutes}분</a>
+          <a class="btn btn-ghost" href="index.html">작품관</a>
+        </div>
+      </div>`;
+  }
+
+  function trackCuts() {
+    const imgs = [...$("cuts").querySelectorAll("img")];
+    const tick = () => {
+      const max = stage.scrollHeight - stage.clientHeight;
+      const r = max > 0 ? Math.min(stage.scrollTop / max, 1) : 0;
+      $("pg").style.width = (r * 100).toFixed(1) + "%";
+      $("rail-fill").style.height = (r * 180) + "px";
+      const mid = stage.scrollTop + stage.clientHeight / 2;
+      let n = 1;
+      imgs.forEach((im, i) => { if (im.offsetTop <= mid) n = i + 1; });
+      $("rail-n").textContent = `${n} / ${imgs.length}`;
+    };
+    stage.addEventListener("scroll", tick, { passive: true });
+    window.addEventListener("load", tick);
+    tick();
+  }
+
+  const prevOk = ep > 1;
+  const nextEp = ep + 1;
+  const nextOk = nextEp <= Series.count();
+  if (nextOk) { $("e-next").href = href(nextEp); $("e-next").textContent = `${nextEp}화 보기`; }
+  else { $("e-next").className = "btn btn-ghost"; $("e-next").textContent = "1막 완결"; $("e-next").href = "index.html"; }
+
+  const zen = () => document.body.classList.toggle("zen");
+  $("zen").onclick = zen;
+
+  ReaderUI.keys({
+    prev: () => prevOk && (location.href = href(ep - 1)),
+    next: () => nextOk && (location.href = href(nextEp)),
+    extra: (e) => {
+      if (e.key === "f" || e.key === "F") zen();
+      if (e.key === " ") { e.preventDefault(); stage.scrollBy({ top: stage.clientHeight * 0.85, behavior: "smooth" }); }
+    },
+  });
+
+  setTimeout(() => $("hint").classList.add("gone"), 8000);
+})();
+</script>
+</body>
+</html>

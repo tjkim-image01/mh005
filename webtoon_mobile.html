@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<title>점창여제 — 웹툰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/app.css"/>
+<style>
+  body { background:#000; -webkit-tap-highlight-color:transparent; user-select:none; }
+  .ttl { flex:1; text-align:center; min-width:0; }
+  .ttl b { display:block; font-size:13.5px; font-weight:700; color:var(--white);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ttl span { font-size:10.5px; color:var(--coral); }
+
+  main { padding:var(--bar) 0 calc(var(--bar) + 20px); }
+  #cuts { max-width:var(--col); margin:0 auto; background:#000; font-size:0; }
+  #cuts img { width:100%; height:auto; display:block; }
+
+  /* 컷이 아직 없을 때 — 빈 화면 대신 대본이 어디까지 왔는지 보여준다 */
+  .pending { max-width:var(--col); margin:0 auto; padding:56px 22px 40px; text-align:center; }
+  .pending .seal { font-family:var(--serif); font-size:52px; color:rgba(226,104,95,.22); line-height:1; margin-bottom:22px; }
+  .pending h2 { font-size:21px; color:var(--white); margin-bottom:10px; }
+  .pending .hook { font-family:var(--serif); font-size:14.5px; color:var(--amber); line-height:1.85;
+    margin:0 auto 26px; max-width:24em; }
+  .stat { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line-soft);
+    border:1px solid var(--line-soft); border-radius:var(--r); overflow:hidden; margin-bottom:26px; }
+  .stat div { background:var(--panel); padding:15px 8px; }
+  .stat .v { font-family:var(--serif); font-size:20px; color:var(--white); }
+  .stat .k { font-size:10.5px; color:var(--dim); margin-top:3px; }
+  .pending .note { font-size:12.5px; color:var(--dim); line-height:1.9; margin-bottom:26px; }
+  .pending .acts { display:flex; flex-direction:column; gap:9px; }
+
+  .end { max-width:var(--col); margin:0 auto; padding:44px 22px 28px; text-align:center;
+    border-top:1px solid var(--line-soft); }
+  .end .done { font-family:var(--serif); font-size:17px; color:var(--white); margin-bottom:6px; }
+  .end .sub { font-size:12px; color:var(--dim); margin-bottom:22px; }
+  .end .acts { display:flex; flex-direction:column; gap:9px; }
+
+  .cut-no { position:fixed; right:10px; bottom:calc(var(--bar) + 12px + env(safe-area-inset-bottom));
+    z-index:45; font-size:11px; color:var(--dim); background:rgba(14,18,23,.9);
+    border:1px solid var(--line-soft); padding:4px 10px; border-radius:999px;
+    transition:opacity .25s var(--ease); }
+  .cut-no.hidden { opacity:0; }
+  .nav-btn { display:flex; flex-direction:column; align-items:center; gap:2px;
+    font-size:10.5px; color:var(--mist); padding:6px 14px; border-radius:9px; }
+  .nav-btn:disabled { opacity:.25; pointer-events:none; }
+  .nav-btn i { font-style:normal; font-size:15px; }
+</style>
+</head>
+<body>
+
+<div class="progress"><i id="pg"></i></div>
+
+<header class="bar top" id="topbar">
+  <div class="bar-inner">
+    <a class="icon-btn" href="index.html" aria-label="작품관으로">←</a>
+    <button class="ttl" id="btn-title" aria-label="회차 목록 열기">
+      <b id="t-title">불러오는 중…</b><span>점창여제</span>
+    </button>
+    <a class="icon-btn" id="btn-novel" title="소설로 읽기" aria-label="소설로 읽기"
+       style="font-family:var(--serif);font-weight:700;font-size:15px">冊</a>
+  </div>
+</header>
+
+<main>
+  <div id="cuts"></div>
+  <div id="pending"></div>
+  <div class="end" id="end" hidden>
+    <div class="done" id="e-done"></div>
+    <div class="sub" id="e-sub"></div>
+    <div class="acts">
+      <a class="btn btn-fill" id="e-next">다음 화</a>
+      <a class="btn btn-ghost" id="e-novel">이 회차 소설로 읽기</a>
+      <a class="btn btn-ghost" href="index.html">작품관</a>
+    </div>
+  </div>
+</main>
+
+<nav class="bar bottom" id="botbar">
+  <div class="bar-inner">
+    <button class="nav-btn" id="b-prev"><i>◀</i><span>이전화</span></button>
+    <button class="nav-btn" id="b-list"><i>☰</i><span id="b-label">1 / 10화</span></button>
+    <button class="nav-btn" id="b-next"><i>▶</i><span>다음화</span></button>
+  </div>
+</nav>
+
+<div class="cut-no" id="cut-no" hidden>1 / 1</div>
+
+<div class="sheet-back" id="back"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-head"><span id="sheet-title">전체 회차</span><button class="icon-btn" id="btn-close" aria-label="닫기">✕</button></div>
+  <div class="sheet-list" id="list-body"></div>
+</div>
+
+<script src="assets/js/series_data.js"></script>
+<script src="assets/js/novel.js"></script>
+<script src="assets/js/reader_ui.js"></script>
+<script>
+(() => {
+  const ep = Series.epFromQuery();
+  const meta = Series.get(ep);
+  const $ = (id) => document.getElementById(id);
+  const href = (n) => `webtoon_mobile.html?ep=${n}`;
+
+  document.title = `${meta.title} — 점창여제`;
+  $("t-title").textContent = meta.title;
+  $("b-label").textContent = `${ep} / ${Series.count()}화`;
+  $("btn-novel").href = `novel_mobile.html?ep=${ep}`;
+  $("e-novel").href = `novel_mobile.html?ep=${ep}`;
+
+  ReaderUI.episodeList($("list-body"), ep, href, { requireCuts: true });
+  ReaderUI.sheet($("sheet"), $("back"), [$("btn-title"), $("b-list"), $("btn-close")]);
+
+  // 컷이 있으면 컷을, 없으면 대본 상태 카드를 그린다.
+  if (meta.webtoonReady) {
+    $("cuts").innerHTML = meta.cuts.map((src, i) =>
+      `<img src="${src}" alt="${ep}화 ${i + 1}컷" loading="${i < 3 ? "eager" : "lazy"}" decoding="async"/>`).join("");
+    $("cut-no").hidden = false;
+    $("end").hidden = false;
+    $("e-done").textContent = `${meta.title} 끝`;
+    $("e-sub").textContent = `${meta.cuts.length}컷` +
+      (meta.cutGrade ? ` · 절단 ${meta.cutGrade}${meta.cutGradeLabel ? " " + meta.cutGradeLabel : ""}` : "");
+    trackCuts();
+  } else {
+    $("pending").innerHTML = `
+      <div class="pending">
+        <div class="seal">槍</div>
+        <h2>${meta.title.replace(/^\d+화\s*—\s*/, "")}</h2>
+        <p class="hook">${meta.hook}</p>
+        <div class="stat">
+          <div><div class="v">${meta.scriptCuts}</div><div class="k">컷 대본</div></div>
+          <div><div class="v">${meta.bubbles}</div><div class="k">말풍선</div></div>
+          <div><div class="v">${meta.cutGrade || "—"}</div><div class="k">절단 강도</div></div>
+        </div>
+        <p class="note">이 회차는 <b style="color:var(--mist)">컷 대본까지 완료</b>되었습니다.<br/>
+          작화(03.make)가 끝나면 이 자리에 컷이 채워집니다.<br/>
+          지금은 같은 이야기를 소설로 먼저 읽을 수 있습니다.</p>
+        <div class="acts">
+          <a class="btn btn-fill" href="novel_mobile.html?ep=${ep}">소설로 읽기 · ${meta.minutes}분</a>
+          <a class="btn btn-ghost" href="index.html">작품관</a>
+        </div>
+      </div>`;
+  }
+
+  function trackCuts() {
+    const imgs = [...$("cuts").querySelectorAll("img")];
+    const tick = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      $("pg").style.width = (max > 0 ? Math.min(window.scrollY / max, 1) * 100 : 0).toFixed(1) + "%";
+      const mid = window.scrollY + window.innerHeight / 2;
+      let n = 1;
+      imgs.forEach((im, i) => { if (im.offsetTop <= mid) n = i + 1; });
+      $("cut-no").textContent = `${n} / ${imgs.length}`;
+    };
+    window.addEventListener("scroll", tick, { passive: true });
+    window.addEventListener("load", tick);
+    tick();
+  }
+
+  // 이동 — 컷이 준비된 회차만 다음화로 넘어간다
+  const prevOk = ep > 1;
+  const nextEp = ep + 1;
+  const nextOk = nextEp <= Series.count();
+  $("b-prev").disabled = !prevOk;
+  $("b-next").disabled = !nextOk;
+  $("b-prev").onclick = () => prevOk && (location.href = href(ep - 1));
+  $("b-next").onclick = () => nextOk && (location.href = href(nextEp));
+  if (nextOk) { $("e-next").href = href(nextEp); $("e-next").textContent = `${nextEp}화 보기`; }
+  else { $("e-next").classList.add("btn-ghost"); $("e-next").textContent = "1막 완결"; $("e-next").href = "index.html"; }
+
+  ReaderUI.autoHide([$("topbar"), $("botbar")], $("cut-no"), document.querySelector("main"));
+  ReaderUI.keys({
+    prev: () => prevOk && (location.href = href(ep - 1)),
+    next: () => nextOk && (location.href = href(nextEp)),
+  });
+})();
+</script>
+</body>
+</html>

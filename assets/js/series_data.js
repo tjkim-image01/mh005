@@ -1,0 +1,605 @@
+/* 『점창여제』 전시 데이터 — 화면 5장의 단일 진실 원천.
+ *
+ * WORK · CHARACTERS · WORLD 는 손으로 쓴다(출처: 00.bible).
+ * EPISODES 는 BUILD:START~END 사이에 tools/build_web.py 가 써 넣는다. 손대지 말 것.
+ */
+
+const WORK = {
+  id: "mh005",
+  title: "점창여제",
+  hanja: "點蒼女帝",
+  english: "The Spear Empress of Diancang",
+  part: "1부 『창월무후(槍月武后)』",
+  actNames: { 1: "1막 — 산문(山門)", 2: "2막 — 중원행", 3: "3막 — 혈월" },
+  genre: "정통 무협 · 여성 원톱 성장 액션 · 문파 재건",
+  rating: "15세 이용가",
+  author: "STUDIO JATU",
+  tagline: "검이 대답하지 않았다. 그래서, 창을 들었다.",
+  logline:
+    "검의 명문 점창파에서 ‘절맥’이라 조롱받던 장문인의 딸 한서하. " +
+    "황실의 봉첩령과 마교의 부활로 아버지가 독에 쓰러지고 문파가 무너지던 날, " +
+    "그녀는 점창이 수백 년간 숨겨 온 진짜 무공, 창을 만난다.",
+  theme: "약함은 부끄러움이 아니다. 무너질 때마다 다시 창을 드는 자가 결국 지존이 된다.",
+  quote: "검을 못 쥐는 손이라서요. 대신… 이건 놓지 않아요.",
+  // 지금의 제작 단계. 정직하게 적는다 — PROGRESS.md 와 같이 움직인다.
+  status: {
+    // 수치는 EPISODES 에서 계산한다. 원고가 늘면 문구도 같이 는다.
+    novel: (n) => `${n}화 공개 중`,
+    webtoon: (n, cuts) => `${n}화 대본 완료 · ${cuts}컷 · 작화 준비 중`,
+  },
+};
+
+/* 캐릭터 시트는 03.make 가 생성한 16:9 모델시트(정면·3/4·측면 + 표정)다.
+ * 인물 초상이 아니므로 화면에서도 '시트'로 보여준다 — 잘라내지 않는다. */
+const CHARACTERS = [
+  {
+    id: "seoha", name: "한서하", hanja: "韓瑞霞", role: "여주인공",
+    epithet: "점창의 절맥녀 → 창월무후", tag: "17세 · 월음창골",
+    image: "assets/characters/CHAR-SEOHA.jpg",
+    quote: "검을 못 쥐는 손이라서요. 대신… 이건 놓지 않아요.",
+  },
+  {
+    id: "doyun", name: "강도윤", hanja: "姜道潤", role: "남주인공 · 비밀을 가진 동행자",
+    epithet: "청의객 · 비연검", tag: "22세",
+    image: "assets/characters/CHAR-DOYUN.jpg",
+    quote: "오지랖 넓은 아가씨로군. 죽고 싶으면 계속 그렇게 앞에 서 있든가.",
+  },
+  {
+    id: "soyeon", name: "민소연", hanja: "閔素蓮", role: "단짝 친구 · 약당 제자",
+    epithet: "약당의 은침", tag: "17세",
+    image: "assets/characters/CHAR-SOYEON.jpg",
+    quote: "너 혼자 점창이야?! 우리는 뭔데!",
+  },
+  {
+    id: "jinmok", name: "한진목", hanja: "韓鎭穆", role: "제17대 장문인 · 아버지",
+    epithet: "운해검(雲海劍)", tag: "48세",
+    image: "assets/characters/CHAR-JINMOK.jpg",
+    quote: "무공은 잊어라. 너는… 살아야 한다.",
+  },
+  {
+    id: "muhyeok", name: "최무혁", hanja: "崔武赫", role: "대장로 · 숨은 배신자",
+    epithet: "철면검(鐵面劍)", tag: "56세 · 집법당주",
+    image: "assets/characters/CHAR-MUHYEOK.jpg",
+    quote: "점창을 망친 것은 적이 아니오. 무른 장문인이오.",
+  },
+  {
+    id: "mansu", name: "고만수", hanja: "高萬壽", role: "파문된 전설의 창객 · 스승",
+    epithet: "창산광객(蒼山狂客)", tag: "89세 · 창산 제19봉",
+    image: "assets/characters/CHAR-MANSU.jpg",
+    quote: "약하다고? 좋구먼. 약한 놈만이 한 번 더 찌르는 법을 배우거든.",
+  },
+  {
+    id: "taegyeom", name: "주태겸", hanja: "朱泰謙", role: "삼대제자 사형 · 3·7화의 사람",
+    epithet: "고개를 돌린 사람", tag: "20대 후반 · 약값에 몰린 제자",
+    image: "assets/characters/CHAR-TAEGYEOM.jpg",
+    quote: "사형은 나쁜 사람이 아니었다. 그냥, 가진 게 하나뿐인 사람이었다.",
+  },
+  {
+    id: "seolgyeong", name: "윤설경", hanja: "尹雪卿", role: "서하의 어머니 · 고인",
+    epithet: "금지된 창법을 익힌 사람", tag: "서하 7세 때 사망 · 3막의 진실",
+    image: "assets/characters/CHAR-SEOLGYEONG.jpg",
+    quote: "설경이 남긴 또 하나의 딸.",
+  },
+  {
+    id: "mugeuk", name: "염무극", hanja: "廉無極", role: "혈천교 파군성주 · 1부 최종 적",
+    epithet: "칠살성 파군성(破軍星)", tag: "38세 · 1막에서는 실루엣만",
+    image: "assets/characters/CHAR-MUGEUK-SIL.jpg",
+    quote: "일어나라, 점창의 계집. 아직 네 눈이 죽지 않았다.",
+  },
+];
+
+const WORLD = [
+  {
+    title: "점창파(點蒼派)",
+    body:
+      "운해 위에 선 서남 무림의 검문. 제17대 장문인 한진목이 쓰러지고 " +
+      "구파의 자리를 1년 안에 증명하지 못하면 문패를 내려야 한다.",
+  },
+  {
+    title: "창(槍)의 금기",
+    body:
+      "점창의 진짜 시작은 검이 아니라 창이었다. 60년 전 창법 금지령으로 " +
+      "창법장로 고만수가 파문되면서, 문파는 스스로의 뿌리를 지웠다.",
+  },
+  {
+    title: "혈천교(血天敎)",
+    body:
+      "서남의 봉인을 풀려는 마교. 일곱 대간부 칠살성 중 파군성주 염무극이 " +
+      "점창의 붕괴를 설계한다. 혈월이 뜨는 밤이 그 기한이다.",
+  },
+];
+
+// ===== BUILD:START — tools/build_web.py 가 덮어쓴다. 직접 고치지 말 것 =====
+const EPISODES = [
+ {
+  "ep": 1,
+  "act": 1,
+  "title": "1화 — 혈월(血月)이 뜬다",
+  "hook": "“차는, 이제 끓이지 마라.” — 왜?",
+  "cutGrade": "C4",
+  "cutGradeLabel": "반전",
+  "scriptCuts": 80,
+  "bubbles": 53,
+  "scenes": 6,
+  "chars": 6136,
+  "minutes": 7,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 2,
+  "act": 1,
+  "title": "2화 — 석 달 전부터",
+  "hook": "알고도 또 넣는다. 아버지는 왜 잔을 밀어내는가",
+  "cutGrade": "C3",
+  "cutGradeLabel": "전환",
+  "scriptCuts": 72,
+  "bubbles": 54,
+  "scenes": 5,
+  "chars": 5287,
+  "minutes": 6,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 3,
+  "act": 1,
+  "title": "3화 — 사형의 이름",
+  "hook": "끌려가는 사형이 남긴 말이 아버지가 한 말과 똑같다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 84,
+  "bubbles": 60,
+  "scenes": 4,
+  "chars": 4833,
+  "minutes": 5,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 4,
+  "act": 1,
+  "title": "4화 — 창",
+  "hook": "검을 쥐면 피를 토하던 손이 창을 쥐자 따뜻해진다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "전환",
+  "scriptCuts": 76,
+  "bubbles": 48,
+  "scenes": 6,
+  "chars": 4446,
+  "minutes": 5,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 5,
+  "act": 1,
+  "title": "5화 — 산문(山門)",
+  "hook": "파문당하기 직전의 아이가 마을 앞에 처음으로 선다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 82,
+  "bubbles": 52,
+  "scenes": 6,
+  "chars": 3901,
+  "minutes": 4,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 6,
+  "act": 1,
+  "title": "6화 — 문규 제3조",
+  "hook": "아버지는 딸의 굳은살을 보고도 아무것도 묻지 않는다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 70,
+  "bubbles": 56,
+  "scenes": 5,
+  "chars": 3580,
+  "minutes": 4,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 7,
+  "act": 1,
+  "title": "7화 — 고개를 돌린 사람",
+  "hook": "죽은 사형의 품에서 나온 것은 독병이 아니라 폐병약이었다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 78,
+  "bubbles": 51,
+  "scenes": 5,
+  "chars": 3573,
+  "minutes": 4,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 8,
+  "act": 1,
+  "title": "8화 — 목책",
+  "hook": "쫓겨난 아이가 쫓아낸 문파의 마을 앞에 선다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 86,
+  "bubbles": 58,
+  "scenes": 7,
+  "chars": 3733,
+  "minutes": 4,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 9,
+  "act": 1,
+  "title": "9화 — 짓밟히다",
+  "hook": "적의 입에서 진실이 새어 나온다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 74,
+  "bubbles": 49,
+  "scenes": 7,
+  "chars": 3370,
+  "minutes": 4,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 10,
+  "act": 1,
+  "title": "10화 — 잘했다",
+  "hook": "아버지가 문 너머에서 세 글자를 말하고, 혼잣말 하나를 남긴다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 72,
+  "bubbles": 44,
+  "scenes": 4,
+  "chars": 3024,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 11,
+  "act": 2,
+  "title": "11화 — 짐수레",
+  "hook": "열일곱 해 만에 '절맥'이 아닌 이름으로 불린다",
+  "cutGrade": "C2",
+  "cutGradeLabel": "예고",
+  "scriptCuts": 72,
+  "bubbles": 50,
+  "scenes": 7,
+  "chars": 3486,
+  "minutes": 4,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 12,
+  "act": 2,
+  "title": "12화 — 보수",
+  "hook": "저잣거리 벽에 점창의 인장이 찍힌 방문이 붙는다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 68,
+  "bubbles": 52,
+  "scenes": 5,
+  "chars": 2617,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 13,
+  "act": 2,
+  "title": "13화 — 무슨 낯으로",
+  "hook": "이름을 숨기고 막기 시작한다 — 두 번째 별호가 생긴다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 74,
+  "bubbles": 49,
+  "scenes": 6,
+  "chars": 2657,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 14,
+  "act": 2,
+  "title": "14화 — 용린",
+  "hook": "동굴 벽화의 여인 얼굴이 긁혀 지워져 있다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 70,
+  "bubbles": 47,
+  "scenes": 6,
+  "chars": 2423,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 15,
+  "act": 2,
+  "title": "15화 — 어머니의 이름",
+  "hook": "아버지가 각혈했다는 소식이 온다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 66,
+  "bubbles": 53,
+  "scenes": 6,
+  "chars": 2002,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 16,
+  "act": 2,
+  "title": "16화 — 폐사당",
+  "hook": "최무혁이 서하의 발자국을 한참 보다가 지운다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 68,
+  "bubbles": 42,
+  "scenes": 8,
+  "chars": 2088,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 17,
+  "act": 2,
+  "title": "17화 — 설련",
+  "hook": "도망친 독인이 “성녀가 도망친 곳이 여기였군”이라고 한다",
+  "cutGrade": "C2",
+  "cutGradeLabel": "",
+  "scriptCuts": 66,
+  "bubbles": 45,
+  "scenes": 7,
+  "chars": 2092,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 18,
+  "act": 2,
+  "title": "18화 — 누리",
+  "hook": "“너한테서 그 냄새 나” — 아주 오래된 거, 손에",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 68,
+  "bubbles": 56,
+  "scenes": 6,
+  "chars": 1801,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 19,
+  "act": 2,
+  "title": "19화 — 끊긴 길",
+  "hook": "이긴 뒤에 알게 된다 — 유인이었다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 76,
+  "bubbles": 54,
+  "scenes": 8,
+  "chars": 2287,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 20,
+  "act": 2,
+  "title": "20화 — 이름",
+  "hook": "독의 이름을 얻고, 아버지의 일 년을 쓴다",
+  "cutGrade": "C5",
+  "cutGradeLabel": "",
+  "scriptCuts": 78,
+  "bubbles": 51,
+  "scenes": 9,
+  "chars": 2262,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 21,
+  "act": 3,
+  "title": "21화 — 받아 적는 손",
+  "hook": "그가 종이를 불에 넣는다. “이건 안 보냈소.”",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 70,
+  "bubbles": 58,
+  "scenes": 8,
+  "chars": 2290,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 22,
+  "act": 3,
+  "title": "22화 — 월영창",
+  "hook": "창을 쥐자 봉인의 홈에서 바람이 샌다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 68,
+  "bubbles": 46,
+  "scenes": 7,
+  "chars": 1871,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 23,
+  "act": 3,
+  "title": "23화 — 증언",
+  "hook": "최무혁이 소매를 걷는다 — 자백이 아니라 협박",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 72,
+  "bubbles": 57,
+  "scenes": 10,
+  "chars": 2177,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 24,
+  "act": 3,
+  "title": "24화 — 누이",
+  "hook": "백화회춘단은 한 알뿐이다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 64,
+  "bubbles": 50,
+  "scenes": 7,
+  "chars": 1981,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 25,
+  "act": 3,
+  "title": "25화 — 이름",
+  "hook": "촌장 일곱이 무릎을 꿇지 않고 옆에 선다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "",
+  "scriptCuts": 76,
+  "bubbles": 48,
+  "scenes": 9,
+  "chars": 1969,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 26,
+  "act": 3,
+  "title": "26화 — 그날 밤",
+  "hook": "“길을 가르쳐 줬을 뿐이지”",
+  "cutGrade": "C5",
+  "cutGradeLabel": "",
+  "scriptCuts": 70,
+  "bubbles": 52,
+  "scenes": 9,
+  "chars": 1850,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 27,
+  "act": 3,
+  "title": "27화 — 스승",
+  "hook": "“하나 남겼다며. 오늘 쓰지 마라.”",
+  "cutGrade": "C5",
+  "cutGradeLabel": "",
+  "scriptCuts": 74,
+  "bubbles": 44,
+  "scenes": 10,
+  "chars": 1771,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 28,
+  "act": 3,
+  "title": "28화 — 이름 셋",
+  "hook": "붉은 달이 뜬다",
+  "cutGrade": "C4",
+  "cutGradeLabel": "",
+  "scriptCuts": 62,
+  "bubbles": 40,
+  "scenes": 10,
+  "chars": 1910,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 29,
+  "act": 3,
+  "title": "29화 — 월하일섬",
+  "hook": "“…아버지. 저 잘했어요?”",
+  "cutGrade": "C5",
+  "cutGradeLabel": "",
+  "scriptCuts": 88,
+  "bubbles": 49,
+  "scenes": 14,
+  "chars": 2650,
+  "minutes": 3,
+  "cuts": [],
+  "webtoonReady": false
+ },
+ {
+  "ep": 30,
+  "act": 3,
+  "title": "30화 — 창월무후",
+  "hook": "창날에 비친 붉은 달 — 혈월은 끝나지 않았다",
+  "cutGrade": "C3",
+  "cutGradeLabel": "2부 예고",
+  "scriptCuts": 66,
+  "bubbles": 54,
+  "scenes": 12,
+  "chars": 2128,
+  "minutes": 2,
+  "cuts": [],
+  "webtoonReady": false
+ }
+];
+// ===== BUILD:END =====
+
+/* ---- 화면 5장이 공유하는 조회 헬퍼 ---- */
+const Series = {
+  work: WORK,
+  characters: CHARACTERS,
+  world: WORLD,
+  episodes: EPISODES,
+  count: () => EPISODES.length,
+  /** 막 번호 → 그 막의 회차들. 원고가 늘면 막이 저절로 생긴다. */
+  byAct() {
+    const acts = new Map();
+    EPISODES.forEach((e) => {
+      if (!acts.has(e.act)) acts.set(e.act, []);
+      acts.get(e.act).push(e);
+    });
+    return [...acts.entries()].map(([act, eps]) => ({
+      act,
+      name: WORK.actNames[act] || `${act}막`,
+      eps,
+    }));
+  },
+  actLabel: (ep) => WORK.actNames[Series.get(ep)?.act] || "",
+  get(ep) {
+    return EPISODES.find((e) => e.ep === ep) || null;
+  },
+  clamp(ep) {
+    const n = EPISODES.length;
+    if (!n) return 1;
+    return Math.min(Math.max(parseInt(ep, 10) || 1, 1), n);
+  },
+  epFromQuery() {
+    return Series.clamp(new URLSearchParams(location.search).get("ep") || 1);
+  },
+  /** 화면 폭으로 모바일/PC 를 고른다. ?force=pc|mobile 로 무시할 수 있다. */
+  link(kind, ep) {
+    const force = new URLSearchParams(location.search).get("force");
+    const mobile = force ? force === "mobile" : window.matchMedia("(max-width: 820px)").matches;
+    return `${kind}_${mobile ? "mobile" : "pc"}.html?ep=${ep}`;
+  },
+};

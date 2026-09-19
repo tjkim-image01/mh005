@@ -1,0 +1,134 @@
+/* 소설 뷰어 — 조판과 테마. 모바일·PC 공용.
+ * 테마·글자 크기·행간은 <html data-theme|data-size|data-lead|data-font> 로 갈린다.
+ */
+
+:root {
+  --paper: var(--ink);
+  --text: #d5dee4;
+  --text-dim: #7e8b93;
+  --edge: rgba(255, 255, 255, 0.07);
+  --accent: var(--coral);
+  --fs: 17px;
+  --lh: 2;
+}
+
+html[data-theme="sepia"] {
+  --paper: #f3ebdd;
+  --text: #2f2921;
+  --text-dim: #8a7c68;
+  --edge: rgba(70, 58, 40, 0.16);
+  --accent: #a8442f;
+}
+html[data-theme="night"] {
+  --paper: #000;
+  --text: #9fa9b0;
+  --text-dim: #5b666e;
+  --edge: rgba(255, 255, 255, 0.06);
+  --accent: #b9524b;
+}
+
+html[data-size="1"] { --fs: 15px; }
+html[data-size="2"] { --fs: 17px; }
+html[data-size="3"] { --fs: 19px; }
+html[data-size="4"] { --fs: 21px; }
+html[data-size="5"] { --fs: 24px; }
+
+html[data-lead="0"] { --lh: 1.75; }
+html[data-lead="1"] { --lh: 2; }
+html[data-lead="2"] { --lh: 2.3; }
+
+body.reader {
+  background: var(--paper);
+  color: var(--text);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+/* ---- 본문 조판 ---- */
+.prose {
+  font-family: var(--serif);
+  font-size: var(--fs);
+  line-height: var(--lh);
+  letter-spacing: 0.005em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+html[data-font="sans"] .prose { font-family: var(--sans); letter-spacing: -0.005em; }
+
+.prose p { margin: 0 0 1.15em; }
+/* 대사 줄은 들여쓰기 대신 살짝 띄워 호흡을 준다 */
+.prose p:has(+ p) { margin-bottom: 1.15em; }
+
+.scene { margin: 0; }
+.sep {
+  text-align: center;
+  color: var(--accent);
+  opacity: 0.5;
+  font-size: 13px;
+  letter-spacing: 0.5em;
+  margin: 3.2em 0 3em;
+  user-select: none;
+}
+
+/* ---- 회차 머리 ---- */
+.opener { padding: 0 0 2.6em; border-bottom: 1px solid var(--edge); margin-bottom: 2.6em; }
+.opener .n { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); }
+.opener h1 {
+  font-family: var(--serif); color: var(--text);
+  font-size: calc(var(--fs) * 1.75); line-height: 1.45; margin: 0.5em 0 0.6em;
+}
+.opener .hook {
+  font-family: var(--serif); font-size: calc(var(--fs) * 0.92);
+  color: var(--accent); line-height: 1.8; margin: 0;
+  padding-left: 14px; border-left: 2px solid var(--accent);
+}
+.opener .info { margin-top: 1.4em; font-family: var(--sans); font-size: 12px; color: var(--text-dim); }
+
+/* ---- 회차 끝 ---- */
+.ending { margin-top: 4em; padding-top: 2.4em; border-top: 1px solid var(--edge); text-align: center; }
+.ending .done { font-family: var(--serif); font-size: calc(var(--fs) * 1.05); color: var(--text); margin-bottom: 8px; }
+.ending .cut { font-family: var(--sans); font-size: 12.5px; color: var(--text-dim); margin-bottom: 22px; }
+.ending .acts { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.ending .go {
+  font-family: var(--sans); font-size: 14px; font-weight: 700;
+  padding: 12px 22px; border-radius: 10px;
+  background: var(--accent); color: var(--paper);
+}
+.ending .go.alt { background: transparent; border: 1px solid var(--edge); color: var(--text); }
+.ending .go.off { opacity: 0.35; pointer-events: none; }
+
+/* ---- 설정 패널 ---- */
+.settings-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 4px; }
+.settings-row + .settings-row { border-top: 1px solid var(--edge); }
+.settings-row .lbl { font-family: var(--sans); font-size: 13px; color: var(--text-dim); }
+.seg { display: flex; gap: 4px; }
+.seg button {
+  min-width: 38px; padding: 7px 11px; border-radius: 8px;
+  border: 1px solid var(--edge); font-size: 13px; color: var(--text);
+  font-family: var(--sans); background: transparent;
+}
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); font-weight: 700; }
+.swatch { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--edge); }
+.swatch[data-t="ink"] { background: #0a0c0f; }
+.swatch[data-t="sepia"] { background: #f3ebdd; }
+.swatch[data-t="night"] { background: #000; }
+.swatch[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 테마가 바뀌면 공용 바도 따라간다 */
+html[data-theme="sepia"] .bar { background: rgba(243, 235, 221, 0.95); border-color: var(--edge); }
+/* 상단바 글자는 --text 를 따라간다(novel_mobile.html). 테마별 예외를 두지 않는다. */
+html[data-theme="sepia"] .pct,
+html[data-theme="sepia"] .resume { background: #f8f2e8; border-color: rgba(70,58,40,.2); color: #2f2921; }
+html[data-theme="sepia"] .resume b { color: #a8442f; }
+html[data-theme="sepia"] .sheet .tabs button[aria-pressed="true"] { color: #f8f2e8; }
+html[data-theme="sepia"] .sheet-head .icon-btn { color: #6b5f4d; }
+html[data-theme="sepia"] .badge.mute { color: #8a7c68; border-color: rgba(70,58,40,.2); background: rgba(70,58,40,.06); }
+
+/* 야간 테마도 같은 이유로 한 번 더 고정한다 */
+html[data-theme="night"] .bar { background: rgba(0,0,0,.95); }
+html[data-theme="sepia"] .sheet { background: #f8f2e8; }
+html[data-theme="sepia"] .sheet-head { color: #2f2921; }
+html[data-theme="sepia"] .ep-row { color: #4a4234; }
+html[data-theme="sepia"] .ep-row .n { background: rgba(70, 58, 40, 0.12); color: #2f2921; }
+html[data-theme="sepia"] .ep-row.current { color: #a8442f; background: rgba(168, 68, 47, 0.12); }
+html[data-theme="sepia"] .ep-row.current .n { background: #a8442f; color: #f8f2e8; }
+html[data-theme="sepia"] .progress > i { background: #a8442f; }
