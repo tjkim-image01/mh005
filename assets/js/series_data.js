@@ -115,16 +115,24 @@ const EPISODES = [
   "ep": 1,
   "act": 1,
   "title": "1화 — 혈월(血月)이 뜬다",
-  "hook": "“차는, 이제 끓이지 마라.” — 왜?",
+  "hook": "“차는, 이제 끓이지 마라.”",
   "cutGrade": "C4",
   "cutGradeLabel": "반전",
   "scriptCuts": 80,
   "bubbles": 53,
   "scenes": 6,
-  "chars": 6136,
+  "chars": 6030,
   "minutes": 7,
-  "cuts": [],
-  "webtoonReady": false
+  "cuts": [
+   "assets/webtoon/ep01/P01.png",
+   "assets/webtoon/ep01/P02.png",
+   "assets/webtoon/ep01/P03.png",
+   "assets/webtoon/ep01/P04.png",
+   "assets/webtoon/ep01/P05.png",
+   "assets/webtoon/ep01/P06.png",
+   "assets/webtoon/ep01/P07.png"
+  ],
+  "webtoonReady": true
  },
  {
   "ep": 2,
@@ -136,8 +144,8 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 54,
   "scenes": 5,
-  "chars": 5287,
-  "minutes": 6,
+  "chars": 4846,
+  "minutes": 5,
   "cuts": [],
   "webtoonReady": false
  },
@@ -151,8 +159,8 @@ const EPISODES = [
   "scriptCuts": 84,
   "bubbles": 60,
   "scenes": 4,
-  "chars": 4833,
-  "minutes": 5,
+  "chars": 5012,
+  "minutes": 6,
   "cuts": [],
   "webtoonReady": false
  },
@@ -166,7 +174,7 @@ const EPISODES = [
   "scriptCuts": 76,
   "bubbles": 48,
   "scenes": 6,
-  "chars": 4446,
+  "chars": 4807,
   "minutes": 5,
   "cuts": [],
   "webtoonReady": false
@@ -181,8 +189,8 @@ const EPISODES = [
   "scriptCuts": 82,
   "bubbles": 52,
   "scenes": 6,
-  "chars": 3901,
-  "minutes": 4,
+  "chars": 4267,
+  "minutes": 5,
   "cuts": [],
   "webtoonReady": false
  },
@@ -196,7 +204,7 @@ const EPISODES = [
   "scriptCuts": 70,
   "bubbles": 56,
   "scenes": 5,
-  "chars": 3580,
+  "chars": 4014,
   "minutes": 4,
   "cuts": [],
   "webtoonReady": false
@@ -211,7 +219,7 @@ const EPISODES = [
   "scriptCuts": 78,
   "bubbles": 51,
   "scenes": 5,
-  "chars": 3573,
+  "chars": 3852,
   "minutes": 4,
   "cuts": [],
   "webtoonReady": false
@@ -226,8 +234,8 @@ const EPISODES = [
   "scriptCuts": 86,
   "bubbles": 58,
   "scenes": 7,
-  "chars": 3733,
-  "minutes": 4,
+  "chars": 4220,
+  "minutes": 5,
   "cuts": [],
   "webtoonReady": false
  },
@@ -241,7 +249,7 @@ const EPISODES = [
   "scriptCuts": 74,
   "bubbles": 49,
   "scenes": 7,
-  "chars": 3370,
+  "chars": 3684,
   "minutes": 4,
   "cuts": [],
   "webtoonReady": false
@@ -256,8 +264,8 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 44,
   "scenes": 4,
-  "chars": 3024,
-  "minutes": 3,
+  "chars": 3472,
+  "minutes": 4,
   "cuts": [],
   "webtoonReady": false
  },
@@ -346,7 +354,7 @@ const EPISODES = [
   "scriptCuts": 68,
   "bubbles": 42,
   "scenes": 8,
-  "chars": 2107,
+  "chars": 2087,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -376,7 +384,7 @@ const EPISODES = [
   "scriptCuts": 68,
   "bubbles": 56,
   "scenes": 6,
-  "chars": 1801,
+  "chars": 1767,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -421,7 +429,7 @@ const EPISODES = [
   "scriptCuts": 70,
   "bubbles": 58,
   "scenes": 8,
-  "chars": 2290,
+  "chars": 2302,
   "minutes": 3,
   "cuts": [],
   "webtoonReady": false
@@ -466,7 +474,7 @@ const EPISODES = [
   "scriptCuts": 64,
   "bubbles": 50,
   "scenes": 7,
-  "chars": 1983,
+  "chars": 1961,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -511,7 +519,7 @@ const EPISODES = [
   "scriptCuts": 74,
   "bubbles": 44,
   "scenes": 10,
-  "chars": 1771,
+  "chars": 1756,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
