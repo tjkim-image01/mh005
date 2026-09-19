@@ -118,10 +118,10 @@ const EPISODES = [
   "hook": "“차는, 이제 끓이지 마라.”",
   "cutGrade": "C4",
   "cutGradeLabel": "반전",
-  "scriptCuts": 80,
-  "bubbles": 53,
+  "scriptCuts": 89,
+  "bubbles": 0,
   "scenes": 6,
-  "chars": 6004,
+  "chars": 6053,
   "minutes": 7,
   "cuts": [
    "assets/webtoon/ep01/P01.png",
@@ -219,7 +219,7 @@ const EPISODES = [
   "scriptCuts": 78,
   "bubbles": 51,
   "scenes": 5,
-  "chars": 3852,
+  "chars": 3850,
   "minutes": 4,
   "cuts": [],
   "webtoonReady": false
@@ -264,7 +264,7 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 44,
   "scenes": 4,
-  "chars": 3489,
+  "chars": 3719,
   "minutes": 4,
   "cuts": [],
   "webtoonReady": false
