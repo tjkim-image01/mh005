@@ -121,7 +121,7 @@ const EPISODES = [
   "scriptCuts": 80,
   "bubbles": 53,
   "scenes": 6,
-  "chars": 6030,
+  "chars": 6004,
   "minutes": 7,
   "cuts": [
    "assets/webtoon/ep01/P01.png",
@@ -144,7 +144,7 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 54,
   "scenes": 5,
-  "chars": 4846,
+  "chars": 4837,
   "minutes": 5,
   "cuts": [],
   "webtoonReady": false
@@ -159,7 +159,7 @@ const EPISODES = [
   "scriptCuts": 84,
   "bubbles": 60,
   "scenes": 4,
-  "chars": 5012,
+  "chars": 5086,
   "minutes": 6,
   "cuts": [],
   "webtoonReady": false
@@ -174,7 +174,7 @@ const EPISODES = [
   "scriptCuts": 76,
   "bubbles": 48,
   "scenes": 6,
-  "chars": 4807,
+  "chars": 4846,
   "minutes": 5,
   "cuts": [],
   "webtoonReady": false
@@ -204,8 +204,8 @@ const EPISODES = [
   "scriptCuts": 70,
   "bubbles": 56,
   "scenes": 5,
-  "chars": 4014,
-  "minutes": 4,
+  "chars": 4199,
+  "minutes": 5,
   "cuts": [],
   "webtoonReady": false
  },
@@ -234,7 +234,7 @@ const EPISODES = [
   "scriptCuts": 86,
   "bubbles": 58,
   "scenes": 7,
-  "chars": 4220,
+  "chars": 4289,
   "minutes": 5,
   "cuts": [],
   "webtoonReady": false
@@ -249,8 +249,8 @@ const EPISODES = [
   "scriptCuts": 74,
   "bubbles": 49,
   "scenes": 7,
-  "chars": 3684,
-  "minutes": 4,
+  "chars": 4287,
+  "minutes": 5,
   "cuts": [],
   "webtoonReady": false
  },
@@ -264,7 +264,7 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 44,
   "scenes": 4,
-  "chars": 3472,
+  "chars": 3489,
   "minutes": 4,
   "cuts": [],
   "webtoonReady": false
