@@ -137,15 +137,15 @@ const EPISODES = [
  {
   "ep": 2,
   "act": 1,
-  "title": "2화 — 석 달 전부터",
+  "title": "2화 — 몇 달 전부터",
   "hook": "알고도 또 넣는다. 아버지는 왜 잔을 밀어내는가",
   "cutGrade": "C3",
   "cutGradeLabel": "전환",
   "scriptCuts": 72,
   "bubbles": 54,
   "scenes": 5,
-  "chars": 4837,
-  "minutes": 5,
+  "chars": 5365,
+  "minutes": 6,
   "cuts": [],
   "webtoonReady": false
  },
@@ -279,7 +279,7 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 50,
   "scenes": 7,
-  "chars": 3486,
+  "chars": 3782,
   "minutes": 4,
   "cuts": [],
   "webtoonReady": false
@@ -294,7 +294,7 @@ const EPISODES = [
   "scriptCuts": 68,
   "bubbles": 52,
   "scenes": 5,
-  "chars": 2617,
+  "chars": 2887,
   "minutes": 3,
   "cuts": [],
   "webtoonReady": false
