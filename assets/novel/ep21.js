@@ -1,5 +1,5 @@
 // 자동 생성 — tools/build_web.py. 직접 고치지 말 것.
-// 원본: 01.story/1차교정/21화.md
+// 원본: 01.story/2차교정/21화.md
 window.NOVEL_EP[21] = {
  "ep": 21,
  "title": "21화 — 받아 적는 손",

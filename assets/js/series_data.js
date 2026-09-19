@@ -316,7 +316,7 @@ const EPISODES = [
   "scriptCuts": 70,
   "bubbles": 47,
   "scenes": 6,
-  "chars": 2423,
+  "chars": 2370,
   "minutes": 3,
   "cuts": [],
   "webtoonReady": false
@@ -346,7 +346,7 @@ const EPISODES = [
   "scriptCuts": 68,
   "bubbles": 42,
   "scenes": 8,
-  "chars": 2088,
+  "chars": 2107,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -391,7 +391,7 @@ const EPISODES = [
   "scriptCuts": 76,
   "bubbles": 54,
   "scenes": 8,
-  "chars": 2287,
+  "chars": 2280,
   "minutes": 3,
   "cuts": [],
   "webtoonReady": false
@@ -406,7 +406,7 @@ const EPISODES = [
   "scriptCuts": 78,
   "bubbles": 51,
   "scenes": 9,
-  "chars": 2262,
+  "chars": 2261,
   "minutes": 3,
   "cuts": [],
   "webtoonReady": false
@@ -436,7 +436,7 @@ const EPISODES = [
   "scriptCuts": 68,
   "bubbles": 46,
   "scenes": 7,
-  "chars": 1871,
+  "chars": 1845,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -451,7 +451,7 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 57,
   "scenes": 10,
-  "chars": 2177,
+  "chars": 2173,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -466,7 +466,7 @@ const EPISODES = [
   "scriptCuts": 64,
   "bubbles": 50,
   "scenes": 7,
-  "chars": 1981,
+  "chars": 1983,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -481,7 +481,7 @@ const EPISODES = [
   "scriptCuts": 76,
   "bubbles": 48,
   "scenes": 9,
-  "chars": 1969,
+  "chars": 1965,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -496,7 +496,7 @@ const EPISODES = [
   "scriptCuts": 70,
   "bubbles": 52,
   "scenes": 9,
-  "chars": 1850,
+  "chars": 1839,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -526,7 +526,7 @@ const EPISODES = [
   "scriptCuts": 62,
   "bubbles": 40,
   "scenes": 10,
-  "chars": 1910,
+  "chars": 1909,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
@@ -541,7 +541,7 @@ const EPISODES = [
   "scriptCuts": 88,
   "bubbles": 49,
   "scenes": 14,
-  "chars": 2650,
+  "chars": 2666,
   "minutes": 3,
   "cuts": [],
   "webtoonReady": false
@@ -556,7 +556,7 @@ const EPISODES = [
   "scriptCuts": 66,
   "bubbles": 54,
   "scenes": 12,
-  "chars": 2128,
+  "chars": 2136,
   "minutes": 2,
   "cuts": [],
   "webtoonReady": false
