@@ -121,7 +121,7 @@ const EPISODES = [
   "scriptCuts": 89,
   "bubbles": 0,
   "scenes": 6,
-  "chars": 7940,
+  "chars": 7951,
   "minutes": 9,
   "cuts": [
    "assets/webtoon/ep01/P01.png",
@@ -144,7 +144,7 @@ const EPISODES = [
   "scriptCuts": 72,
   "bubbles": 54,
   "scenes": 5,
-  "chars": 5365,
+  "chars": 5678,
   "minutes": 6,
   "cuts": [],
   "webtoonReady": false
